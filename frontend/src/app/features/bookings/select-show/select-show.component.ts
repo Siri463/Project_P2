@@ -252,9 +252,6 @@ export class SelectShowComponent implements OnInit {
           this.shows = response.data || [];
         }
         
-        // Filter out past shows (show time has passed)
-        this.shows = this.filterPastShows(this.shows);
-        
         this.groupShowsByVenue();
         this.loading = false;
       },

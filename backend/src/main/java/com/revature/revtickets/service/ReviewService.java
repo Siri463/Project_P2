@@ -85,4 +85,10 @@ public class ReviewService {
             .average()
             .orElse(0.0);
     }
+
+    public List<Review> getReviewsByUserEmail(String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
+            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        return reviewRepository.findByUserIdOrderByCreatedAtDesc(user.getUserId());
+    }
 }

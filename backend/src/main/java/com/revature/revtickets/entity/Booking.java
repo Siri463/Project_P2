@@ -80,6 +80,9 @@ public class Booking {
     @Column(name = "qr_code_url", length = 500)
     private String qrCodeUrl;
 
+    @Column(name = "qr_code_base64", columnDefinition = "TEXT")
+    private String qrCodeBase64;
+
     @CreationTimestamp
     @Column(name = "booking_date", updatable = false)
     private LocalDateTime bookingDate;

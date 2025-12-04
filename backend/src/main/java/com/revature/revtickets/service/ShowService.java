@@ -50,22 +50,7 @@ public class ShowService {
     }
     
     public List<LocalDate> getAvailableDatesForMovie(Long movieId) {
-        List<LocalDate> allDates = showRepository.findDistinctShowDatesByMovieMovieIdAndIsActiveTrue(movieId);
-        LocalDate today = LocalDate.now();
-        LocalTime now = LocalTime.now();
-        
-        // Filter dates that have at least one available show
-        return allDates.stream()
-            .filter(date -> {
-                List<Show> showsOnDate = showRepository.findByMovieMovieIdAndShowDateAndIsActiveTrue(movieId, date);
-                // If date is today, filter out shows that have already started
-                if (date.equals(today)) {
-                    return showsOnDate.stream().anyMatch(show -> show.getShowTime().isAfter(now));
-                }
-                // For future dates, return true if there are any shows
-                return !showsOnDate.isEmpty();
-            })
-            .collect(java.util.stream.Collectors.toList());
+        return showRepository.findDistinctShowDatesByMovieMovieIdAndIsActiveTrue(movieId);
     }
 
     public List<Show> getShowsByEventId(Long eventId, LocalDate date) {
@@ -73,22 +58,7 @@ public class ShowService {
     }
     
     public List<LocalDate> getAvailableDatesForEvent(Long eventId) {
-        List<LocalDate> allDates = showRepository.findDistinctShowDatesByEventEventIdAndIsActiveTrue(eventId);
-        LocalDate today = LocalDate.now();
-        LocalTime now = LocalTime.now();
-        
-        // Filter dates that have at least one available show
-        return allDates.stream()
-            .filter(date -> {
-                List<Show> showsOnDate = showRepository.findByEventEventIdAndShowDateAndIsActiveTrue(eventId, date);
-                // If date is today, filter out shows that have already started
-                if (date.equals(today)) {
-                    return showsOnDate.stream().anyMatch(show -> show.getShowTime().isAfter(now));
-                }
-                // For future dates, return true if there are any shows
-                return !showsOnDate.isEmpty();
-            })
-            .collect(java.util.stream.Collectors.toList());
+        return showRepository.findDistinctShowDatesByEventEventIdAndIsActiveTrue(eventId);
     }
 
     public List<Show> getShowsByVenueId(Long venueId, LocalDate date) {

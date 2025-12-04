@@ -17,10 +17,10 @@ public interface ShowRepository extends JpaRepository<Show, Long> {
     List<Show> findByVenueVenueIdAndShowDateAndIsActiveTrue(Long venueId, LocalDate showDate);
     List<Show> findByShowDateAfterAndIsActiveTrue(LocalDate date);
     
-    @Query("SELECT DISTINCT s.showDate FROM Show s WHERE s.movie.movieId = :movieId AND s.isActive = true AND s.showDate >= CURRENT_DATE ORDER BY s.showDate")
+    @Query("SELECT DISTINCT s.showDate FROM Show s WHERE s.movie.movieId = :movieId AND s.isActive = true ORDER BY s.showDate")
     List<LocalDate> findDistinctShowDatesByMovieMovieIdAndIsActiveTrue(Long movieId);
     
-    @Query("SELECT DISTINCT s.showDate FROM Show s WHERE s.event.eventId = :eventId AND s.isActive = true AND s.showDate >= CURRENT_DATE ORDER BY s.showDate")
+    @Query("SELECT DISTINCT s.showDate FROM Show s WHERE s.event.eventId = :eventId AND s.isActive = true ORDER BY s.showDate")
     List<LocalDate> findDistinctShowDatesByEventEventIdAndIsActiveTrue(Long eventId);
     
     @Query("SELECT s FROM Show s WHERE s.showDate >= :date AND s.isActive = true ORDER BY s.showDate, s.showTime")

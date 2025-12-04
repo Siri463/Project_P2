@@ -3,6 +3,7 @@
 *.jar
 *.war
 *.ear
+*.nar
 target/
 *.log
 
@@ -10,6 +11,12 @@ target/
 .mvn/
 mvnw
 mvnw.cmd
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
 
 # IDE
 .idea/
@@ -19,42 +26,84 @@ mvnw.cmd
 .vscode/
 *.swp
 *.swo
+.project
+.classpath
+.settings/
+.metadata/
+bin/
 
 # Spring Boot
 spring-boot-*.jar
+HELP.md
 
-# Node
+# Node & NPM
 node_modules/
 dist/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+lerna-debug.log*
+package-lock.json
+yarn.lock
+.pnpm-debug.log*
 
 # Angular
 .angular/
 .nx/
+.angular-cache/
+*.ngfactory.ts
+*.ngsummary.json
+*.metadata.json
 
 # Environment
 .env
 .env.local
+.env.*.local
 application-local.properties
+application-dev.properties
+application-prod.properties
 
 # OS
 .DS_Store
 Thumbs.db
+ehthumbs.db
+Desktop.ini
 
-# Uploads
+# Uploads & Images (LARGE FILES)
+backend/public/display/*
+backend/public/banner/*
+backend/public/images/*
+!backend/public/display/.gitkeep
+!backend/public/banner/.gitkeep
+!backend/public/images/.gitkeep
 public/images/*
 !public/images/.gitkeep
 
 # Database
 *.db
 *.sqlite
+*.h2.db
 
 # Logs
 logs/
 *.log
+*.log.*
 
 # Build
 build/
 out/
+.cache/
+
+# Test Coverage
+coverage/
+.nyc_output/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# Documentation (optional - remove if you want to keep)
+*.md.backup

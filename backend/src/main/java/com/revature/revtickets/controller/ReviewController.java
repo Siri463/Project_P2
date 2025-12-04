@@ -53,7 +53,7 @@ public class ReviewController {
     public ResponseEntity<ApiResponse<Review>> createReview(
             @RequestBody Review review,
             Authentication authentication) {
-        String userEmail = authentication.getName();
+        String userEmail = authentication != null ? authentication.getName() : "anonymous";
         Review created = reviewService.createReview(review, userEmail);
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(new ApiResponse<>(true, "Review created successfully", created));
@@ -71,5 +71,12 @@ public class ReviewController {
     public ResponseEntity<ApiResponse<Void>> deleteReview(@PathVariable String id) {
         reviewService.deleteReview(id);
         return ResponseEntity.ok(new ApiResponse<>(true, "Review deleted successfully", null));
+    }
+
+    @GetMapping("/my-reviews")
+    public ResponseEntity<ApiResponse<List<Review>>> getMyReviews(Authentication authentication) {
+        String userEmail = authentication != null ? authentication.getName() : "anonymous";
+        List<Review> reviews = reviewService.getReviewsByUserEmail(userEmail);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Reviews retrieved", reviews));
     }
 }

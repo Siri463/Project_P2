@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
@@ -8,7 +9,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 @Component({
   selector: 'app-movie-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   template: `
     <div class="min-h-screen bg-[#050505] text-white" *ngIf="movie">
       <!-- Hero Section with Banner Background -->
@@ -65,7 +66,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
                     <span class="text-gray-400">({{ totalReviews }}+ Votes)</span>
                   </div>
                   <div *ngIf="averageRating === 0" class="text-gray-400">No ratings yet</div>
-                  <button class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm transition-colors">
+                  <button (click)="showRatingModal = true" class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm transition-colors">
                     Rate now
                   </button>
                 </div>
@@ -144,9 +145,9 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
         <section class="mb-12">
           <div class="flex items-center justify-between mb-6">
             <h2 class="text-2xl font-bold">Reviews</h2>
-            <span class="text-red-500 cursor-pointer hover:underline" *ngIf="reviews.length > 0">
-              {{ reviews.length }} reviews >
-            </span>
+            <button (click)="toggleReviews()" class="text-red-500 hover:underline" *ngIf="reviews.length > 0">
+              {{ showAllReviewsFlag ? 'Show less' : (reviews.length > 6 ? 'Show all ' + reviews.length + ' reviews >' : reviews.length + ' reviews') }}
+            </button>
           </div>
 
           <!-- Loading -->
@@ -161,7 +162,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
           <!-- Reviews List -->
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" *ngIf="!loadingReviews && reviews.length > 0">
-            <div *ngFor="let review of reviews.slice(0, 6)" class="bg-[#121212] rounded-xl p-6 border border-white/5">
+            <div *ngFor="let review of showAllReviewsFlag ? reviews : reviews.slice(0, 6)" class="bg-[#121212] rounded-xl p-6 border border-white/5">
               <!-- User Info -->
               <div class="flex items-center gap-3 mb-3">
                 <div class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center">
@@ -180,7 +181,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
               </div>
 
               <!-- Review Text -->
-              <p class="text-gray-300 text-sm line-clamp-4">{{ review.reviewText }}</p>
+              <p class="text-gray-300 text-sm" *ngIf="review.comment">{{ review.comment }}</p>
+              <p class="text-gray-400 text-sm italic" *ngIf="!review.comment">No review text provided</p>
 
               <!-- Tags -->
               <div class="flex gap-2 mt-3 flex-wrap" *ngIf="review.tags && review.tags.length > 0">
@@ -191,6 +193,42 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
             </div>
           </div>
         </section>
+      </div>
+    </div>
+
+    <!-- Rating Modal -->
+    <div *ngIf="showRatingModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" (click)="showRatingModal = false">
+      <div class="bg-[#1a1a1a] rounded-2xl p-8 max-w-md w-full border border-white/10" (click)="$event.stopPropagation()">
+        <h3 class="text-2xl font-bold mb-6">Rate this movie</h3>
+        
+        <div class="mb-6">
+          <label class="block mb-2">Your Rating</label>
+          <div class="flex gap-2">
+            <button *ngFor="let star of [1,2,3,4,5,6,7,8,9,10]" 
+              (click)="userRating = star"
+              [class]="userRating >= star ? 'bg-red-600' : 'bg-gray-700'"
+              class="w-10 h-10 rounded-lg hover:bg-red-500 transition-colors font-bold">
+              {{star}}
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-6">
+          <label class="block mb-2">Review (optional)</label>
+          <textarea [(ngModel)]="userReview" rows="4" 
+            class="w-full bg-gray-800 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500"
+            placeholder="Share your thoughts..."></textarea>
+        </div>
+
+        <div class="flex gap-3">
+          <button (click)="showRatingModal = false" class="flex-1 px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
+            Cancel
+          </button>
+          <button (click)="submitRating()" [disabled]="!userRating" 
+            class="flex-1 px-6 py-3 bg-red-600 hover:bg-red-700 disabled:bg-gray-700 disabled:cursor-not-allowed rounded-lg transition-colors">
+            Submit
+          </button>
+        </div>
       </div>
     </div>
   `
@@ -204,6 +242,10 @@ export class MovieDetailsComponent implements OnInit {
   loadingReviews = false;
   averageRating = 0;
   totalReviews = 0;
+  showRatingModal = false;
+  userRating = 0;
+  userReview = '';
+  showAllReviewsFlag = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -305,5 +347,36 @@ export class MovieDetailsComponent implements OnInit {
 
   goBack() {
     this.router.navigate(['/movies']);
+  }
+
+  toggleReviews() {
+    this.showAllReviewsFlag = !this.showAllReviewsFlag;
+  }
+
+  submitRating() {
+    if (!this.userRating) return;
+
+    const review = {
+      movieId: this.movieId,
+      rating: this.userRating,
+      comment: this.userReview?.trim() || null,
+      reviewType: 'MOVIE'
+    };
+
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` };
+
+    this.http.post<any>(`${environment.apiUrl}/reviews`, review, { headers }).subscribe({
+      next: () => {
+        this.showRatingModal = false;
+        this.userRating = 0;
+        this.userReview = '';
+        this.loadReviews();
+      },
+      error: (err) => {
+        console.error('Error submitting rating:', err);
+        alert('Failed to submit rating. Please try again.');
+      }
+    });
   }
 }

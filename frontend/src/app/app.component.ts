@@ -12,7 +12,7 @@ import { filter } from 'rxjs/operators';
   template: `
     <app-navbar *ngIf="showNavbar"></app-navbar>
     <router-outlet></router-outlet>
-    <app-footer></app-footer>
+    <app-footer *ngIf="showNavbar"></app-footer>
   `
 })
 export class AppComponent {

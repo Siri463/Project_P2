@@ -112,9 +112,9 @@ import { environment } from '../../../../environments/environment';
               </div>
 
               <!-- QR Code -->
-              <div *ngIf="booking.qrCodeUrl && booking.bookingStatus === 'CONFIRMED'" class="flex justify-center items-center bg-white rounded-xl p-4">
+              <div *ngIf="getQRCodeUrl(booking) && booking.bookingStatus === 'CONFIRMED'" class="flex justify-center items-center bg-white rounded-xl p-4">
                 <div class="text-center">
-                  <img [src]="booking.qrCodeUrl" alt="Booking QR Code" class="w-48 h-48 mx-auto mb-2">
+                  <img [src]="getQRCodeUrl(booking)" alt="Booking QR Code" class="w-48 h-48 mx-auto mb-2">
                   <p class="text-sm text-gray-600 font-medium">Scan at venue</p>
                 </div>
               </div>
@@ -205,5 +205,15 @@ export class MyBookingsComponent implements OnInit {
       return `${displayHour}:${minutes} ${ampm}`;
     }
     return time;
+  }
+
+  getQRCodeUrl(booking: any): string | null {
+    if (booking.qrCodeBase64) {
+      return `data:image/png;base64,${booking.qrCodeBase64}`;
+    }
+    if (booking.qrCodeUrl) {
+      return booking.qrCodeUrl;
+    }
+    return null;
   }
 }

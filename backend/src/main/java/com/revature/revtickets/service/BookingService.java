@@ -99,6 +99,8 @@ public class BookingService {
         try {
             String qrData = String.format("REV-%s-%s", booking.getBookingReference(), booking.getBookingId());
             qrCodeBase64 = qrCodeGenerator.generateQRCodeBase64(qrData, 300, 300);
+            booking.setQrCodeBase64(qrCodeBase64);
+            bookingRepository.save(booking);
         } catch (Exception e) {
             // Log error but don't fail the booking
             System.err.println("Failed to generate QR code: " + e.getMessage());

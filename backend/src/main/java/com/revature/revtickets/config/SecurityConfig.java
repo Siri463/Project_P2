@@ -62,6 +62,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/venues/**").permitAll()
                 .requestMatchers("/api/banners/**").permitAll()
                 .requestMatchers("/api/reviews/**").permitAll()
+                .requestMatchers("/api/health/**").permitAll()
                 .requestMatchers("/public/**").permitAll()
                 .requestMatchers("/display/**").permitAll()  // Allow static image access
                 .requestMatchers("/banner/**").permitAll()   // Allow static image access
