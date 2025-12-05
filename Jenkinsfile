@@ -58,7 +58,7 @@ pipeline {
             echo 'Build failed!'
         }
         always {
-            bat 'docker system prune -f'
+            bat 'docker system prune -f || exit 0'
         }
     }
 }
