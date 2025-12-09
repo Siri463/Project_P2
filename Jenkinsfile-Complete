@@ -3,7 +3,7 @@ pipeline {
     
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials')
-        DOCKER_HUB_REPO = 'yourusername'
+        DOCKER_HUB_REPO = 'subodhxo'
         EC2_HOST = credentials('ec2-host')
         MYSQL_ROOT_PASSWORD = credentials('mysql-root-password')
         STRIPE_API_KEY = credentials('stripe-api-key')
@@ -13,7 +13,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Checking out code from Git...'
-                git branch: 'main', url: 'https://github.com/yourusername/revtickets.git'
+                git branch: 'main', url: 'https://github.com/subodhxo/revtickets.git'
             }
         }
         

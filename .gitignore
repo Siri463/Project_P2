@@ -1,75 +1,38 @@
-# Java
+# Compiled class files
 *.class
+target/
+
+# Log files
+*.log
+
+# Package Files
 *.jar
 *.war
+*.nar
 *.ear
-target/
-build/
+*.zip
+*.tar.gz
+*.rar
 
-# Maven
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-pom.xml.next
-release.properties
-dependency-reduced-pom.xml
-buildNumber.properties
-.mvn/timing.properties
-.mvn/wrapper/maven-wrapper.jar
-
-# Node.js
+# Node modules
 node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-package-lock.json
+frontend/dist/
+frontend/.angular/
 
-# Angular
-.angular/
-dist/
-tmp/
-out-tsc/
-.sass-cache/
-connect.lock
-coverage/
-libpeerconnection.log
-testem.log
-typings/
-
-# IDEs
+# IDE
 .idea/
 *.iml
 .vscode/
 *.swp
 *.swo
-*~
-.project
-.classpath
-.settings/
-.metadata/
-.DS_Store
 
-# Logs
-*.log
-app.log
-logs/
+# OS
+.DS_Store
+Thumbs.db
 
 # Environment
 .env
-.env.local
-.env.*.local
+*.env
 
-# Docker
-*.pid
-*.seed
-*.pid.lock
-
-# OS
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-
-# Temporary
-*.tmp
-*.bak
-*.cache
+# Database
+*.sql

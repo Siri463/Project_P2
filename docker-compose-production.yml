@@ -35,7 +35,7 @@ services:
       retries: 5
 
   eureka-server:
-    image: revtickets-eureka:latest
+    image: subodhxo/revtickets-eureka:latest
     container_name: revtickets-eureka
     build:
       context: ./microservices/eureka-server
@@ -52,7 +52,7 @@ services:
     restart: unless-stopped
 
   user-service:
-    image: revtickets-user:latest
+    image: subodhxo/revtickets-user:latest
     container_name: revtickets-user
     build:
       context: ./microservices/user-service
@@ -74,7 +74,7 @@ services:
     restart: unless-stopped
 
   movie-service:
-    image: revtickets-movie:latest
+    image: subodhxo/revtickets-movie:latest
     container_name: revtickets-movie
     build:
       context: ./microservices/movie-service
@@ -96,7 +96,7 @@ services:
     restart: unless-stopped
 
   venue-service:
-    image: revtickets-venue:latest
+    image: subodhxo/revtickets-venue:latest
     container_name: revtickets-venue
     build:
       context: ./microservices/venue-service
@@ -118,7 +118,7 @@ services:
     restart: unless-stopped
 
   booking-service:
-    image: revtickets-booking:latest
+    image: subodhxo/revtickets-booking:latest
     container_name: revtickets-booking
     build:
       context: ./microservices/booking-service
@@ -140,7 +140,7 @@ services:
     restart: unless-stopped
 
   payment-service:
-    image: revtickets-payment:latest
+    image: subodhxo/revtickets-payment:latest
     container_name: revtickets-payment
     build:
       context: ./microservices/payment-service
@@ -163,7 +163,7 @@ services:
     restart: unless-stopped
 
   api-gateway:
-    image: revtickets-gateway:latest
+    image: subodhxo/revtickets-gateway:latest
     container_name: revtickets-gateway
     build:
       context: ./microservices/api-gateway
@@ -180,7 +180,7 @@ services:
     restart: unless-stopped
 
   frontend:
-    image: revtickets-frontend:latest
+    image: subodhxo/revtickets-frontend:latest
     container_name: revtickets-frontend
     build:
       context: ./frontend
