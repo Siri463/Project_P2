@@ -6,11 +6,9 @@ spring:
     name: movie-service
   data:
     mongodb:
-      host: mongodb
-      port: 27017
-      database: revtickets
+      uri: mongodb://admin:Root@123@REPLACE_WITH_DOCDB_ENDPOINT:27017/revtickets?tls=true&tlsCAFile=/home/ubuntu/global-bundle.pem&retryWrites=false
 
 eureka:
   client:
     service-url:
-      defaultZone: http://eureka-server:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/

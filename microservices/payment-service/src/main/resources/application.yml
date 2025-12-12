@@ -5,9 +5,9 @@ spring:
   application:
     name: payment-service
   datasource:
-    url: jdbc:mysql://localhost:3306/revtickets_payment_db
-    username: root
-    password: root
+    url: jdbc:mysql://REPLACE_WITH_RDS_ENDPOINT:3306/revtickets?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: admin
+    password: Root@123
   jpa:
     hibernate:
       ddl-auto: update
