@@ -4,6 +4,8 @@ import com.revature.userservice.dto.AuthResponse;
 import com.revature.userservice.dto.LoginRequest;
 import com.revature.userservice.dto.RegisterRequest;
 import com.revature.userservice.entity.User;
+import com.revature.userservice.exception.DuplicateUserException;
+import com.revature.userservice.exception.InvalidCredentialsException;
 import com.revature.userservice.repository.UserRepository;
 import com.revature.userservice.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,7 @@ public class AuthService {
 
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already exists");
+            throw new DuplicateUserException("Email already exists");
         }
 
         User user = new User();
@@ -50,10 +52,10 @@ public class AuthService {
 
     public AuthResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
+                .orElseThrow(() -> new InvalidCredentialsException("Invalid credentials"));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
+            throw new InvalidCredentialsException("Invalid credentials");
         }
 
         String token = jwtTokenProvider.generateToken(user.getEmail(), user.getRole().name());

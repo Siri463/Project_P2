@@ -18,21 +18,13 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<User>>> getAllUsers() {
-        try {
-            List<User> users = userService.getAllUsers();
-            return ResponseEntity.ok(new ApiResponse<>(true, "Users fetched successfully", users));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
-        }
+        List<User> users = userService.getAllUsers();
+        return ResponseEntity.ok(new ApiResponse<>(true, "Users fetched successfully", users));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<User>> getUserById(@PathVariable Long id) {
-        try {
-            User user = userService.getUserById(id);
-            return ResponseEntity.ok(new ApiResponse<>(true, "User fetched successfully", user));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
-        }
+        User user = userService.getUserById(id);
+        return ResponseEntity.ok(new ApiResponse<>(true, "User fetched successfully", user));
     }
 }

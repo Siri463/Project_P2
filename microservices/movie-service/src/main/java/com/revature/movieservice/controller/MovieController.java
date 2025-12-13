@@ -23,102 +23,62 @@ public class MovieController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<Movie>>> getAllMovies() {
-        try {
-            List<Movie> movies = movieService.getAllActiveMovies();
-            return ResponseEntity.ok(new ApiResponse<>(true, "Movies retrieved successfully", movies));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
-        }
+        List<Movie> movies = movieService.getAllActiveMovies();
+        return ResponseEntity.ok(new ApiResponse<>(true, "Movies retrieved successfully", movies));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<Movie>> getMovieById(@PathVariable Long id) {
-        try {
-            Movie movie = movieService.getMovieById(id);
-            return ResponseEntity.ok(new ApiResponse<>(true, "Movie retrieved successfully", movie));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
-        }
+        Movie movie = movieService.getMovieById(id);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Movie retrieved successfully", movie));
     }
 
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<List<Movie>>> searchMovies(@RequestParam String title) {
-        try {
-            List<Movie> movies = movieService.searchMovies(title);
-            return ResponseEntity.ok(new ApiResponse<>(true, "Movies found", movies));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
-        }
+        List<Movie> movies = movieService.searchMovies(title);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Movies found", movies));
     }
 
     @GetMapping("/now-showing")
     public ResponseEntity<ApiResponse<List<Movie>>> getNowShowingMovies() {
-        try {
-            List<Movie> movies = movieService.getAllActiveMovies();
-            return ResponseEntity.ok(new ApiResponse<>(true, "Now showing movies retrieved successfully", movies));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
-        }
+        List<Movie> movies = movieService.getAllActiveMovies();
+        return ResponseEntity.ok(new ApiResponse<>(true, "Now showing movies retrieved successfully", movies));
     }
 
     @GetMapping("/coming-soon")
     public ResponseEntity<ApiResponse<List<Movie>>> getComingSoonMovies() {
-        try {
-            List<Movie> movies = movieService.getAllActiveMovies();
-            return ResponseEntity.ok(new ApiResponse<>(true, "Coming soon movies retrieved successfully", movies));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
-        }
+        List<Movie> movies = movieService.getAllActiveMovies();
+        return ResponseEntity.ok(new ApiResponse<>(true, "Coming soon movies retrieved successfully", movies));
     }
 
     @GetMapping("/genre/{genre}")
     public ResponseEntity<ApiResponse<List<Movie>>> getMoviesByGenre(@PathVariable String genre) {
-        try {
-            List<Movie> movies = movieService.getMoviesByGenre(genre);
-            return ResponseEntity.ok(new ApiResponse<>(true, "Movies by genre retrieved successfully", movies));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
-        }
+        List<Movie> movies = movieService.getMoviesByGenre(genre);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Movies by genre retrieved successfully", movies));
     }
 
     @GetMapping("/language/{language}")
     public ResponseEntity<ApiResponse<List<Movie>>> getMoviesByLanguage(@PathVariable String language) {
-        try {
-            List<Movie> movies = movieService.getMoviesByLanguage(language);
-            return ResponseEntity.ok(new ApiResponse<>(true, "Movies by language retrieved successfully", movies));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
-        }
+        List<Movie> movies = movieService.getMoviesByLanguage(language);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Movies by language retrieved successfully", movies));
     }
 
     @GetMapping("/admin/count")
     public ResponseEntity<ApiResponse<Long>> getTotalMovies() {
-        try {
-            long count = movieService.getTotalMovies();
-            return ResponseEntity.ok(new ApiResponse<>(true, "Movie count retrieved successfully", count));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
-        }
+        long count = movieService.getTotalMovies();
+        return ResponseEntity.ok(new ApiResponse<>(true, "Movie count retrieved successfully", count));
     }
 
     @GetMapping("/admin")
     public ResponseEntity<ApiResponse<List<Movie>>> getAdminMovies(@RequestParam(defaultValue = "false") boolean activeOnly) {
-        try {
-            List<Movie> movies = activeOnly ? movieService.getAllActiveMovies() : movieService.getAllMovies();
-            return ResponseEntity.ok(new ApiResponse<>(true, "Movies retrieved successfully", movies));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
-        }
+        List<Movie> movies = activeOnly ? movieService.getAllActiveMovies() : movieService.getAllMovies();
+        return ResponseEntity.ok(new ApiResponse<>(true, "Movies retrieved successfully", movies));
     }
 
     @GetMapping("/admin/{id}")
     public ResponseEntity<ApiResponse<Movie>> getAdminMovieById(@PathVariable Long id) {
-        try {
-            Movie movie = movieService.getMovieById(id);
-            return ResponseEntity.ok(new ApiResponse<>(true, "Movie retrieved successfully", movie));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
-        }
+        Movie movie = movieService.getMovieById(id);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Movie retrieved successfully", movie));
     }
 
     @PostMapping(value = "/admin", consumes = {"multipart/form-data"})

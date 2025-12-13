@@ -1,6 +1,7 @@
 package com.revature.userservice.service;
 
 import com.revature.userservice.entity.User;
+import com.revature.userservice.exception.ResourceNotFoundException;
 import com.revature.userservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,6 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
     }
 }

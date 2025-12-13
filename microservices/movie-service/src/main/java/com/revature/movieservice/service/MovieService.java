@@ -1,6 +1,7 @@
 package com.revature.movieservice.service;
 
 import com.revature.movieservice.entity.Movie;
+import com.revature.movieservice.exception.ResourceNotFoundException;
 import com.revature.movieservice.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class MovieService {
 
     public Movie getMovieById(Long id) {
         return movieRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Movie not found"));
+            .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id: " + id));
     }
 
     public List<Movie> searchMovies(String title) {
