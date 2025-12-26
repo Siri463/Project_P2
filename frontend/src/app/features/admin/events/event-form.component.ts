@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
+import { AdminService } from '../../../core/services/admin.service';
 
 @Component({
   selector: 'app-event-form',
@@ -178,7 +179,8 @@ export class EventFormComponent implements OnInit {
     private fb: FormBuilder,
     private http: HttpClient,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private adminService: AdminService
   ) {
     this.eventForm = this.fb.group({
       title: ['', Validators.required],
@@ -253,10 +255,10 @@ export class EventFormComponent implements OnInit {
         });
         
         if (event.displayImageUrl) {
-          this.displayImagePreview = `http://localhost:8080${event.displayImageUrl}`;
+          this.displayImagePreview = `${environment.apiUrl.replace('/api', '')}${event.displayImageUrl}`;
         }
         if (event.bannerImageUrl) {
-          this.bannerImagePreview = `http://localhost:8080${event.bannerImageUrl}`;
+          this.bannerImagePreview = `${environment.apiUrl.replace('/api', '')}${event.bannerImageUrl}`;
         }
         console.log('Event loaded for editing:', event);
       },
@@ -270,38 +272,64 @@ export class EventFormComponent implements OnInit {
     if (this.eventForm.invalid) return;
 
     this.submitting = true;
-    const formData = new FormData();
     
-    Object.keys(this.eventForm.value).forEach(key => {
-      const value = this.eventForm.value[key];
-      if (value !== null && value !== '') {
-        formData.append(key, value);
+    // If we have images, use FormData
+    if (this.selectedDisplayImage || this.selectedBannerImage) {
+      const formData = new FormData();
+      
+      Object.keys(this.eventForm.value).forEach(key => {
+        const value = this.eventForm.value[key];
+        if (value !== null && value !== '') {
+          formData.append(key, value);
+        }
+      });
+
+      if (this.selectedDisplayImage) {
+        formData.append('displayImage', this.selectedDisplayImage);
       }
-    });
 
-    if (this.selectedDisplayImage) {
-      formData.append('displayImage', this.selectedDisplayImage);
-    }
-
-    if (this.selectedBannerImage) {
-      formData.append('bannerImage', this.selectedBannerImage);
-    }
-
-    const request = this.isEditMode
-      ? this.http.put(`${environment.apiUrl}/admin/events/${this.eventId}`, formData)
-      : this.http.post(`${environment.apiUrl}/admin/events`, formData);
-
-    request.subscribe({
-      next: () => {
-        this.submitting = false;
-        this.router.navigate(['/admin/events']);
-      },
-      error: (err) => {
-        this.submitting = false;
-        console.error('Error saving event:', err);
-        alert('Failed to save event. Please try again.');
+      if (this.selectedBannerImage) {
+        formData.append('bannerImage', this.selectedBannerImage);
       }
-    });
+
+      const request = this.isEditMode
+        ? this.adminService.updateEvent(this.eventId!, formData)
+        : this.adminService.createEvent(formData);
+
+      request.subscribe({
+        next: () => {
+          this.submitting = false;
+          this.router.navigate(['/admin/events']);
+        },
+        error: (err) => {
+          this.submitting = false;
+          console.error('Error saving event:', err);
+          alert('Failed to save event. Please try again.');
+        }
+      });
+    } else {
+      // No images, use JSON
+      const eventData = {
+        ...this.eventForm.value,
+        artistOrTeam: this.eventForm.value.artist
+      };
+
+      const request = this.isEditMode
+        ? this.adminService.updateEventJson(this.eventId!, eventData)
+        : this.adminService.createEventJson(eventData);
+
+      request.subscribe({
+        next: () => {
+          this.submitting = false;
+          this.router.navigate(['/admin/events']);
+        },
+        error: (err) => {
+          this.submitting = false;
+          console.error('Error saving event:', err);
+          alert('Failed to save event. Please try again.');
+        }
+      });
+    }
   }
 
   goBack() {

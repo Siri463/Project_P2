@@ -80,7 +80,7 @@ export class EventService {
   }
 
   getImageUrl(path: string): string {
-    if (!path) return 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?q=80&w=1000';
+    if (!path) return 'https://via.placeholder.com/200x300?text=No+Image';
     if (path.startsWith('http')) return path;
     return `${environment.apiUrl.replace('/api', '')}${path}`;
   }

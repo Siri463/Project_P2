@@ -66,7 +66,7 @@ public class EventController {
         }
     }
 
-    @PostMapping("/admin")
+    @PostMapping(value = "/admin", consumes = {"application/json", "multipart/form-data"})
     public ResponseEntity<ApiResponse<Event>> createAdminEvent(@RequestBody Event event) {
         try {
             event.setIsActive(true);
@@ -77,7 +77,7 @@ public class EventController {
         }
     }
 
-    @PutMapping("/admin/{id}")
+    @PutMapping(value = "/admin/{id}", consumes = {"application/json", "multipart/form-data"})
     public ResponseEntity<ApiResponse<Event>> updateAdminEvent(@PathVariable Long id, @RequestBody Event event) {
         try {
             Event updatedEvent = eventService.updateEvent(id, event);
